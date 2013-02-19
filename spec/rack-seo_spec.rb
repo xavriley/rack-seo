@@ -18,7 +18,14 @@ describe "RackSeo" do
       @example_page.css('title').text.should_not ==  orig_meta_title_text
     end
 
-    it "summarises the description based on the text in #content if it exists"
+    it "summarises the description based on the text in #content if it exists" do
+      orig_meta_description_text = @example_page.css("meta[name='description']").text
+      @rack_seo.execute! @example_page
+      @example_page.css("meta[name='description']").text.should_not == orig_meta_description_text
+      @example_page.css("meta[name='description']").text.should_not == ""
+      @example_page.css("meta[name='description']").text.should_not be_nil
+    end
+
     it "summarises the description based on the text in the page if #content does not exist"
     it "summarises the keywords based on the text in #content if it exists"
     it "summarises the keywords based on the text in the page if #content does not exist"
