@@ -8,6 +8,7 @@ class RackSeo < Rack::PageSpeed::Filter
     setup_meta_tags(document)
     set_meta_title(document)
     set_meta_description(document)
+    set_meta_keywords(document)
   end
 
   def setup_meta_tags(document)
@@ -31,12 +32,25 @@ class RackSeo < Rack::PageSpeed::Filter
     end
   end
 
+  def set_meta_keywords(document)
+    meta_keywords = find_meta_keywords(document)
+    if document.at_css("#content")
+      meta_keywords.content = get_inner_text_from_css(document, "#content").summarize(:topics => true)
+    else
+      meta_keywords.content = get_inner_text_from_css(document, "body").summarize(:topics => true)
+    end
+  end
+
   def find_meta_title(document)
     document.at('title') 
   end
 
   def find_meta_desc(document)
     document.at_css("meta[name='description']")
+  end
+
+  def find_meta_keywords(document)
+    document.at_css("meta[name='keywords']")
   end
 
   private

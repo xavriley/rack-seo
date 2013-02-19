@@ -35,7 +35,21 @@ describe "RackSeo" do
       @example_page_without_content_div.css("meta[name='description']").text.should_not be_nil
     end
 
-    it "summarises the keywords based on the text in #content if it exists"
-    it "summarises the keywords based on the text in the page if #content does not exist"
+    it "summarises the keywords based on the text in #content if it exists" do
+      orig_meta_keywords_text = @example_page.css("meta[name='keywords']").text
+      @rack_seo.execute! @example_page
+      @example_page.css("meta[name='keywords']").text.should_not == orig_meta_keywords_text
+      @example_page.css("meta[name='keywords']").text.should_not == ""
+      @example_page.css("meta[name='keywords']").text.should_not be_nil
+    end
+
+    it "summarises the keywords based on the text in the page if #content does not exist" do
+      orig_meta_keywords_text = @example_page_without_content_div.css("meta[name='keywords']").text
+      @rack_seo.execute! @example_page_without_content_div
+      @example_page_without_content_div.css("meta[name='keywords']").text.should_not == orig_meta_keywords_text
+      @example_page_without_content_div.css("meta[name='keywords']").text.should_not == ""
+      @example_page_without_content_div.css("meta[name='keywords']").text.should_not be_nil
+    end
+
   end
 end
