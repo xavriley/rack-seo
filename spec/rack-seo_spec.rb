@@ -6,14 +6,16 @@ describe "RackSeo" do
   end
 
   context "sensible defaults" do
+    before do
+      @example_page = Fixtures.complex
+    end
+
     it "pulls the h1 tag into the meta title by default" do
-      orig_meta_title = @rack_seo.css('title')
-      orig_h1 = @rack_seo.css('h1').first
-      @rack_seo.execute!
-      new_meta_title = @rack_seo.css('title')
-      new_h1 = @rack_seo.css('h1').first
-      new_meta_title.should == orig_h1
-      new_meta_title.should_not ==  orig_h1
+      orig_meta_title_text = @example_page.css('title').text
+      orig_h1_text = @example_page.css('h1').text
+      @rack_seo.execute! @example_page
+      @example_page.css('title').text.should == orig_h1_text
+      @example_page.css('title').text.should_not ==  orig_meta_title_text
     end
 
     it "summarises the description based on the text in #content if it exists"
