@@ -12,6 +12,7 @@ class RackSeo < Rack::PageSpeed::Filter
   end
 
   def setup_meta_tags(document)
+    create_html_root_node(document) unless document.root.name == "html" 
     doc_head = document.at_css("head") || create_doc_head(document)
     meta_title = document.at_css("title") || create_meta_title(document)
     meta_desc = document.at_css("meta[name='description']") || create_meta_desc(document)
@@ -26,9 +27,9 @@ class RackSeo < Rack::PageSpeed::Filter
   def set_meta_description(document)
     meta_desc = find_meta_desc(document)
     if document.at_css("#content")
-      meta_desc['content'] = get_inner_text_from_css(document, "#content").summarize(:ratio => 10)
+      meta_desc['content'] = get_inner_text_from_css(document, "#content").summarize(:ratio => 1)
     else
-      meta_desc['content'] = get_inner_text_from_css(document, "body").summarize(:ratio => 10)
+      meta_desc['content'] = get_inner_text_from_css(document, "body").summarize(:ratio => 1)
     end
   end
 
@@ -54,10 +55,13 @@ class RackSeo < Rack::PageSpeed::Filter
   end
 
   private
+  def create_html_root_node(document)
+    document.root.wrap('<html></html>')
+  end
 
   def create_doc_head(document)
     doc_head = Nokogiri::XML::Element.new('head', document)
-    document.root.add_child doc_head
+    document.root.children.first.before doc_head
   end
 
   def create_meta_title(document)
