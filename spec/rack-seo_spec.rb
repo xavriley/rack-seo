@@ -84,6 +84,8 @@ describe "RackSeo" do
       keywords.should be =~ /[a-z,]+/
       keywords.split(/,/).length.should be > 1 
     end
+    it "provides a readable phrase for the title (no line breaks)"
+    it "provides a readable paragraph for the meta_description (no line breaks)"
   end
 
 end

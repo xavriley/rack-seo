@@ -12,7 +12,7 @@ class RackSeo < Rack::PageSpeed::Filter
       config = YAML.load(IO.read("config/rack_seo.default.yml"))
     end
     @@title_format = config["default"]["title_format"]
-    @@meta_desc_selector =  config["default"]["meta_desc_selector"]
+    @@meta_description_selector =  config["default"]["meta_description_selector"]
     @@meta_keywords_selector = config["default"]["meta_keywords_selector"]
     super(options)
   end
@@ -40,8 +40,8 @@ class RackSeo < Rack::PageSpeed::Filter
 
   def set_meta_description(document)
     meta_desc = find_meta_desc(document)
-    if document.at_css(@@meta_desc_selector)
-      meta_desc['content'] = get_inner_text_from_css(document, @@meta_desc_selector).summarize(:ratio => 1)
+    if document.at_css(@@meta_description_selector)
+      meta_desc['content'] = get_inner_text_from_css(document, @@meta_description_selector).summarize(:ratio => 1)
     else
       meta_desc['content'] = get_inner_text_from_css(document, "body").summarize(:ratio => 1)
     end
