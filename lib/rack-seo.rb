@@ -26,18 +26,18 @@ class RackSeo < Rack::PageSpeed::Filter
   def set_meta_description(document)
     meta_desc = find_meta_desc(document)
     if document.at_css("#content")
-      meta_desc.content = get_inner_text_from_css(document, "#content").summarize(:ratio => 10)
+      meta_desc['content'] = get_inner_text_from_css(document, "#content").summarize(:ratio => 10)
     else
-      meta_desc.content = get_inner_text_from_css(document, "body").summarize(:ratio => 10)
+      meta_desc['content'] = get_inner_text_from_css(document, "body").summarize(:ratio => 10)
     end
   end
 
   def set_meta_keywords(document)
     meta_keywords = find_meta_keywords(document)
     if document.at_css("#content")
-      meta_keywords.content = get_inner_text_from_css(document, "#content").summarize(:topics => true)
+      meta_keywords['content'] = get_inner_text_from_css(document, "#content").summarize(:topics => true).last
     else
-      meta_keywords.content = get_inner_text_from_css(document, "body").summarize(:topics => true)
+      meta_keywords['content'] = get_inner_text_from_css(document, "body").summarize(:topics => true).last
     end
   end
 

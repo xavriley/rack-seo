@@ -22,34 +22,40 @@ describe "RackSeo" do
     it "summarises the description based on the text in #content if it exists" do
       orig_meta_description_text = @example_page.css("meta[name='description']").text
       @rack_seo.execute! @example_page
-      @example_page.css("meta[name='description']").text.should_not == orig_meta_description_text
-      @example_page.css("meta[name='description']").text.should_not == ""
-      @example_page.css("meta[name='description']").text.should_not be_nil
+      @example_page.css("meta[name='description']").attr('content').should_not == orig_meta_description_text
+      @example_page.css("meta[name='description']").attr('content').should_not == ""
+      @example_page.css("meta[name='description']").attr('content').should_not be_nil
     end
 
     it "summarises the description based on the text in the page if #content does not exist" do
       orig_meta_description_text = @example_page_without_content_div.css("meta[name='description']").text
       @rack_seo.execute! @example_page_without_content_div
-      @example_page_without_content_div.css("meta[name='description']").text.should_not == orig_meta_description_text
-      @example_page_without_content_div.css("meta[name='description']").text.should_not == ""
-      @example_page_without_content_div.css("meta[name='description']").text.should_not be_nil
+      @example_page_without_content_div.css("meta[name='description']").attr('content').should_not == orig_meta_description_text
+      @example_page_without_content_div.css("meta[name='description']").attr('content').should_not == ""
+      @example_page_without_content_div.css("meta[name='description']").attr('content').should_not be_nil
     end
 
     it "summarises the keywords based on the text in #content if it exists" do
       orig_meta_keywords_text = @example_page.css("meta[name='keywords']").text
       @rack_seo.execute! @example_page
-      @example_page.css("meta[name='keywords']").text.should_not == orig_meta_keywords_text
-      @example_page.css("meta[name='keywords']").text.should_not == ""
-      @example_page.css("meta[name='keywords']").text.should_not be_nil
+      @example_page.css("meta[name='keywords']").attr('content').should_not == orig_meta_keywords_text
+      @example_page.css("meta[name='keywords']").attr('content').should_not == ""
+      @example_page.css("meta[name='keywords']").attr('content').should_not be_nil
     end
 
     it "summarises the keywords based on the text in the page if #content does not exist" do
       orig_meta_keywords_text = @example_page_without_content_div.css("meta[name='keywords']").text
       @rack_seo.execute! @example_page_without_content_div
-      @example_page_without_content_div.css("meta[name='keywords']").text.should_not == orig_meta_keywords_text
-      @example_page_without_content_div.css("meta[name='keywords']").text.should_not == ""
-      @example_page_without_content_div.css("meta[name='keywords']").text.should_not be_nil
+      @example_page_without_content_div.css("meta[name='keywords']").attr('content').should_not == orig_meta_keywords_text
+      @example_page_without_content_div.css("meta[name='keywords']").attr('content').should_not == ""
+      @example_page_without_content_div.css("meta[name='keywords']").attr('content').should_not be_nil
     end
-
   end
+
+  context "validate output" do
+    it "should have a title that is less that 160 chars"
+    it "should have a meta description with content that is less that 200 chars"
+    it "should have meta keywords with content that is a lowercase, comma separated list"
+  end
+
 end
