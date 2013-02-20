@@ -1,8 +1,21 @@
+require 'yaml'
 require 'summarize'
 class RackSeo < Rack::PageSpeed::Filter
   name    'seo'
   requires_store
   priority 2
+
+  def self.new options = {}
+    if options[:config]
+      config = YAML.load(IO.read(options[:config]))
+    else
+      config = YAML.load(IO.read("config/rack_seo.default.yml"))
+    end
+    @@title_format = config["default"]["title_format"]
+    @@meta_desc_selector =  config["default"]["meta_desc_selector"]
+    @@meta_keywords_selector = config["default"]["meta_keywords_selector"]
+    super(options)
+  end
 
   def execute!(document)
     setup_meta_tags(document)
@@ -21,13 +34,14 @@ class RackSeo < Rack::PageSpeed::Filter
 
   def set_meta_title(document)
     title = find_meta_title(document)
-    title.content = get_text_from_css(document, "h1")
+    content = parse_meta_title(document, @@title_format)
+    title.content = content
   end
 
   def set_meta_description(document)
     meta_desc = find_meta_desc(document)
-    if document.at_css("#content")
-      meta_desc['content'] = get_inner_text_from_css(document, "#content").summarize(:ratio => 1)
+    if document.at_css(@@meta_desc_selector)
+      meta_desc['content'] = get_inner_text_from_css(document, @@meta_desc_selector).summarize(:ratio => 1)
     else
       meta_desc['content'] = get_inner_text_from_css(document, "body").summarize(:ratio => 1)
     end
@@ -35,8 +49,8 @@ class RackSeo < Rack::PageSpeed::Filter
 
   def set_meta_keywords(document)
     meta_keywords = find_meta_keywords(document)
-    if document.at_css("#content")
-      meta_keywords['content'] = get_inner_text_from_css(document, "#content").summarize(:topics => true).last
+    if document.at_css(@@meta_keywords_selector)
+      meta_keywords['content'] = get_inner_text_from_css(document, @@meta_keywords_selector).summarize(:topics => true).last
     else
       meta_keywords['content'] = get_inner_text_from_css(document, "body").summarize(:topics => true).last
     end
@@ -52,6 +66,12 @@ class RackSeo < Rack::PageSpeed::Filter
 
   def find_meta_keywords(document)
     document.at_css("meta[name='keywords']")
+  end
+
+  def parse_meta_title(document, title_format)
+    title_format.gsub(/{{([^\}]+)}}/) do
+      "#{document.css($1).first.text rescue nil}"
+    end
   end
 
   private

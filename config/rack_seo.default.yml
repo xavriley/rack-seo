@@ -1,0 +1,5 @@
+--- 
+default: 
+  title_format: "{{h1}}"
+  meta_description_selector: "#content"
+  meta_keywords_selector: "#content"
