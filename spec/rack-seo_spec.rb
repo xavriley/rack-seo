@@ -53,6 +53,7 @@ describe "RackSeo" do
   end
 
   context "validate output" do
+    it "should have a head tag that is the first child of the root node"
     it "should have a title that is less that 160 chars"
     it "should have a meta description with content that is less that 200 chars"
     it "should have meta keywords with content that is a lowercase, comma separated list"
