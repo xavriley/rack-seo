@@ -5,15 +5,14 @@ class RackSeo < Rack::PageSpeed::Filter
   requires_store
   priority 2
 
-  def self.new options = {}
+  attr_accessor :config
+
+  def initialize options = {}
     if options[:config]
-      config = YAML.load(IO.read(options[:config]))
+      @config = YAML.load(IO.read(options[:config]))
     else
-      config = YAML.load(IO.read("config/rack_seo.default.yml"))
+      @config = YAML.load(IO.read("config/rack_seo.default.yml"))
     end
-    @@title_format = config["default"]["title_format"]
-    @@meta_description_selector =  config["default"]["meta_description_selector"]
-    @@meta_keywords_selector = config["default"]["meta_keywords_selector"]
     super(options)
   end
 
@@ -34,14 +33,14 @@ class RackSeo < Rack::PageSpeed::Filter
 
   def set_meta_title(document)
     title = find_meta_title(document)
-    content = parse_meta_title(document, @@title_format)
+    content = parse_meta_title(document, get_title_format)
     title.content = content
   end
 
   def set_meta_description(document)
     meta_desc = find_meta_desc(document)
-    if document.at_css(@@meta_description_selector)
-      meta_desc['content'] = get_inner_text_from_css(document, @@meta_description_selector).summarize(:ratio => 1)
+    if document.at_css(get_meta_description_selector)
+      meta_desc['content'] = get_inner_text_from_css(document, get_meta_description_selector).summarize(:ratio => 1)
     else
       meta_desc['content'] = get_inner_text_from_css(document, "body").summarize(:ratio => 1)
     end
@@ -49,8 +48,8 @@ class RackSeo < Rack::PageSpeed::Filter
 
   def set_meta_keywords(document)
     meta_keywords = find_meta_keywords(document)
-    if document.at_css(@@meta_keywords_selector)
-      meta_keywords['content'] = get_inner_text_from_css(document, @@meta_keywords_selector).summarize(:topics => true).last
+    if document.at_css(get_meta_keywords_selector)
+      meta_keywords['content'] = get_inner_text_from_css(document, get_meta_keywords_selector).summarize(:topics => true).last
     else
       meta_keywords['content'] = get_inner_text_from_css(document, "body").summarize(:topics => true).last
     end
@@ -72,6 +71,18 @@ class RackSeo < Rack::PageSpeed::Filter
     title_format.gsub(/{{([^\}]+)}}/) do
       "#{document.css($1).first.text rescue nil}"
     end
+  end
+
+  def get_title_format
+    @config["default"]["title_format"]
+  end
+
+  def get_meta_description_selector
+    @config["default"]["meta_description_selector"]
+  end
+
+  def get_meta_keywords_selector
+    @config["default"]["meta_keywords_selector"]
   end
 
   private

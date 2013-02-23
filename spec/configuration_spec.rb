@@ -16,7 +16,7 @@ describe "RackSeo Configuration" do
       @rack_seo = RackSeo.new :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/happy.yml"
       @rack_seo_default = RackSeo.new :public => Fixtures.path, :store => {}
       @happy_page = Fixtures.complex
-      @default_page = Fixtures.complex
+      @default_page = Fixtures.complex_copy
       @rack_seo.execute! @happy_page
       @rack_seo_default.execute! @default_page
     end
@@ -26,7 +26,9 @@ describe "RackSeo Configuration" do
     it "allows the meta description text source material to be narrowed down by a selector" do
       @happy_page.at_css("meta[name='description']").attr('content').should_not == @default_page.at_css("meta[name='description']").attr('content')
     end
-    it "allows the meta keywords source material to be narrowed down by a selector"
+    it "allows the meta keywords source material to be narrowed down by a selector" do
+      @happy_page.at_css("meta[name='keywords']").attr('content').should_not == @default_page.at_css("meta[name='keywords']").attr('content')
+    end
   end
 
   context "sad config file" do

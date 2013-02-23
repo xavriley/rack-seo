@@ -1,0 +1,5 @@
+--- 
+default: 
+  title_format: "{{nonsenseSelector$%^&}} - Happy happy"
+  meta_description_selector: "badSelector^&*("
+  meta_keywords_selector: "@£$%worseSelector@£$%^&"

@@ -34,6 +34,7 @@ RSpec.configure do |config|
     Fixtures = OpenStruct.new unless defined?(Fixtures)
     Fixtures.path = File.join(File.dirname(__FILE__), 'fixtures')
     Fixtures.complex = Nokogiri::HTML(fixture('complex.html'))
+    Fixtures.complex_copy = Nokogiri::HTML(fixture('complex.html'))
     Fixtures.simple = Nokogiri::HTML(fixture('simple.html'))
   end
 end
