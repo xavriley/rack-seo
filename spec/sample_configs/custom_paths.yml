@@ -1,0 +1,16 @@
+--- 
+default: 
+  title_format: "{{h1}} - Happy happy"
+  meta_description_selector: "#sidebar"
+  meta_keywords_selector: "#banner"
+custom:
+  -
+    matcher: '/test-path'
+    title_format: "Test one - {{h2}}"
+    meta_description_selector: "#banner"
+    meta_keywords_selector: "#sidebar"
+  -
+    matcher: '/test-path-two'
+    title_format: "Test two - {{h2}}"
+    meta_description_selector: "#body"
+    meta_keywords_selector: "#body"

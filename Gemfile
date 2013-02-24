@@ -1,7 +1,6 @@
 source "http://rubygems.org"
 # Add dependencies required to use your gem here.
 # Example:
-gem "rack-pagespeed"
 gem "nokogiri"
 gem "summarize"
 

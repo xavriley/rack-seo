@@ -3,8 +3,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'pry'
 require 'rspec'
 require 'rack/test'
-require 'rack/pagespeed'
-require 'rack/pagespeed/store/disk'
 require 'fileutils'
 require 'tmpdir'
 require 'ostruct'
@@ -18,6 +16,10 @@ module Apps
   class << self
     def complex
       lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('complex.html')]] }
+    end
+
+    def simple
+      lambda { |env| [200, { 'Content-Type' => 'text/html' }, [fixture('simple.html')]] }
     end
 
     def plain_text

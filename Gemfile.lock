@@ -9,11 +9,8 @@ GEM
       git (>= 1.2.5)
       rake
       rdoc
-    jsmin (1.0.1)
     json (1.7.7)
-    memcached (1.5.0)
     method_source (0.8.1)
-    mime-types (1.21)
     multi_json (1.6.1)
     nokogiri (1.5.6)
     pry (0.9.12)
@@ -21,18 +18,6 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.4)
     rack (1.5.2)
-    rack-pagespeed (1.1.2)
-      jeweler
-      jsmin
-      jsmin
-      memcached
-      mime-types
-      nokogiri
-      nokogiri
-      rack
-      rack
-      rack-pagespeed
-      rake
     rack-test (0.6.2)
       rack (>= 1.0)
     rake (10.0.3)
@@ -64,7 +49,6 @@ DEPENDENCIES
   jeweler (~> 1.8.4)
   nokogiri
   pry
-  rack-pagespeed
   rack-test
   rdoc (~> 3.12)
   rspec (~> 2.8.0)
