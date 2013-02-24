@@ -49,17 +49,26 @@ describe "RackSeo Configuration" do
   end
 
   context "configuring formats based on paths" do
+    pending "test / against custom path"
     before do
-      @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/custom_paths.yml"
+      @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}
+      @rack_seo_test = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/custom_paths.yml"
       @page = Fixtures.complex
-      @test_env = Rack::MockRequest.env_for '/test-path'
-      @rack_seo.execute! @page
+      @env = Rack::MockRequest.env_for '/'
+      @env_test = Rack::MockRequest.env_for '/test-path'
+      status, headers, body = @rack_seo.call(@test_env)
+      @response_body = Nokogiri::HTML(body.first)
+      status_test, headers_test, body_test = @rack_seo.call(@test_env)
+      @response_body = Nokogiri::HTML(body.first)
     end
     it "allows title_format to be configured for a certain path" do
-      status, headers, body = @rack_seo.call(@test_env)
-      @page.at_css('title').should_not == Fixtures.complex.at_css('title')
+      @response_body.at_css('title').should_not == Fixtures.complex.at_css('title')
     end
-    it "allows meta_description_selector to be configured for a certain path"
-    it "allows meta_keywords_selector to be configured for a certain path"
+    it "allows meta_description_selector to be configured for a certain path" do
+      @response_body.at_css("meta[name='description']").should == Fixtures.complex.at_css("meta[name='description']")
+    end
+    it "allows meta_keywords_selector to be configured for a certain path" do
+      @response_body.at_css("meta[name='keywords']").should == Fixtures.complex.at_css("meta[name='keywords']")
+    end
   end
 end

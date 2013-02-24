@@ -23,6 +23,7 @@ module Rack
 
       def call env
         @current_path = env['PATH_INFO']
+        @dispatcher = RackSeo::Dispatcher.new(@config, @current_path)
         status, headers, @response = @app.call(env)
         return [status, headers, @response] unless headers['Content-Type'] =~ /html/
         body = ""; @response.each do |part| body << part end

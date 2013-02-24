@@ -1,7 +1,7 @@
 --- 
 default: 
   title_format: "{{h1}} - Custom Path Test"
-  meta_description_selector: "#sidebar"
+  meta_description_selector: "#content"
   meta_keywords_selector: "#banner"
 custom:
   -
@@ -12,5 +12,5 @@ custom:
   -
     matcher: '/test-path-two'
     title_format: "Test two - {{h2}}"
-    meta_description_selector: "#body"
-    meta_keywords_selector: "#body"
+    meta_description_selector: "#banner"
+    meta_keywords_selector: "#sidebar"
