@@ -1,6 +1,9 @@
 require 'summarize'
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "RackSeo Configuration" do
+  before do
+    @env = Rack::MockRequest.env_for '/'
+  end
 
   it "reads a configuration file specified in the initializer" do
     @rack_seo = RackSeo.new :public => Fixtures.path, :store => {}, :config => "config/rack_seo.default.yml"
@@ -32,7 +35,17 @@ describe "RackSeo Configuration" do
   end
 
   context "sad config file" do
-    it "fails gracefully with a bad title format"
+    before do
+      @rack_seo = RackSeo.new :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/sad.yml"
+      @rack_seo_default = RackSeo.new :public => Fixtures.path, :store => {}
+      @sad_page = Fixtures.simple
+      @default_page = Fixtures.simple_copy
+      @rack_seo.execute! @sad_page
+      @rack_seo_default.execute! @default_page
+    end
+    it "fails gracefully with a bad title format" do
+      @env.response.should be_success
+    end
     it "fails gracefully with a bad description selector"
     it "fails gracefully with a bad keywords selector"
   end

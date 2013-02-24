@@ -36,5 +36,6 @@ RSpec.configure do |config|
     Fixtures.complex = Nokogiri::HTML(fixture('complex.html'))
     Fixtures.complex_copy = Nokogiri::HTML(fixture('complex.html'))
     Fixtures.simple = Nokogiri::HTML(fixture('simple.html'))
+    Fixtures.simple_copy = Nokogiri::HTML(fixture('simple.html'))
   end
 end

@@ -40,14 +40,14 @@ class RackSeo < Rack::PageSpeed::Filter
 
   def set_meta_description(document)
     meta_description_tag = find_meta_desc(document)
-    meta_description_selector = document.at_css(get_meta_description_selector).nil? ? "body" : get_meta_description_selector
+    meta_description_selector = find_selector(document, get_meta_description_selector).nil? ? "body" : get_meta_description_selector
     content = get_inner_text_from_css(document, meta_description_selector).summarize(:ratio => 1)
     meta_description_tag['content'] = sanitize_meta_description(content)
   end
 
   def set_meta_keywords(document)
     meta_keywords_tag = find_meta_keywords(document)
-    meta_keywords_selector = document.at_css(get_meta_keywords_selector).nil? ? "body" : get_meta_keywords_selector
+    meta_keywords_selector = find_selector(document, get_meta_keywords_selector).nil? ? "body" : get_meta_keywords_selector
     content = get_inner_text_from_css(document, meta_keywords_selector).summarize(:topics => true).last
     meta_keywords_tag['content'] = sanitize_meta_keywords(content)
   end
@@ -62,6 +62,10 @@ class RackSeo < Rack::PageSpeed::Filter
 
   def find_meta_keywords(document)
     document.at_css("meta[name='keywords']")
+  end
+
+  def find_selector(document, selector)
+    document.at_css(selector) rescue nil
   end
 
   def parse_meta_title(document, title_format)
@@ -124,12 +128,12 @@ class RackSeo < Rack::PageSpeed::Filter
   end
 
   def get_text_from_css(document, selector)
-    element = document.css(selector).first
+    element = find_selector(document, selector)
     element && element.text || ""
   end
 
   def get_inner_text_from_css(document, selector)
-    element = document.css(selector).first
+    element = find_selector(document, selector)
     element && element.inner_text || ""
   end
 end
