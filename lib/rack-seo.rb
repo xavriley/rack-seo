@@ -32,27 +32,24 @@ class RackSeo < Rack::PageSpeed::Filter
   end
 
   def set_meta_title(document)
-    title = find_meta_title(document)
     content = parse_meta_title(document, get_title_format)
-    title.content = content
+    content = sanitize_meta_title(content)
+    title_tag = find_meta_title(document)
+    title_tag.content = content
   end
 
   def set_meta_description(document)
-    meta_desc = find_meta_desc(document)
-    if document.at_css(get_meta_description_selector)
-      meta_desc['content'] = get_inner_text_from_css(document, get_meta_description_selector).summarize(:ratio => 1)
-    else
-      meta_desc['content'] = get_inner_text_from_css(document, "body").summarize(:ratio => 1)
-    end
+    meta_description_tag = find_meta_desc(document)
+    meta_description_selector = document.at_css(get_meta_description_selector).nil? ? "body" : get_meta_description_selector
+    content = get_inner_text_from_css(document, meta_description_selector).summarize(:ratio => 1)
+    meta_description_tag['content'] = sanitize_meta_description(content)
   end
 
   def set_meta_keywords(document)
-    meta_keywords = find_meta_keywords(document)
-    if document.at_css(get_meta_keywords_selector)
-      meta_keywords['content'] = get_inner_text_from_css(document, get_meta_keywords_selector).summarize(:topics => true).last
-    else
-      meta_keywords['content'] = get_inner_text_from_css(document, "body").summarize(:topics => true).last
-    end
+    meta_keywords_tag = find_meta_keywords(document)
+    meta_keywords_selector = document.at_css(get_meta_keywords_selector).nil? ? "body" : get_meta_keywords_selector
+    content = get_inner_text_from_css(document, meta_keywords_selector).summarize(:topics => true).last
+    meta_keywords_tag['content'] = sanitize_meta_keywords(content)
   end
 
   def find_meta_title(document)
@@ -71,6 +68,20 @@ class RackSeo < Rack::PageSpeed::Filter
     title_format.gsub(/{{([^\}]+)}}/) do
       "#{document.css($1).first.text rescue nil}"
     end
+  end
+
+  def sanitize_meta_title(title)
+    title.to_s.gsub(/\s+/, ' ').strip
+  end
+
+  def sanitize_meta_description(meta_description)
+    meta_description.to_s.gsub(/\s+/, ' ').strip
+  end
+
+  def sanitize_meta_keywords(keywords)
+    keywords.split(",").collect { |keyword| 
+      keyword.downcase.gsub(/\s+/, '')
+    }.reject(&:empty?).join(',')
   end
 
   def get_title_format

@@ -37,4 +37,9 @@ describe "RackSeo Configuration" do
     it "fails gracefully with a bad keywords selector"
   end
 
+  context "configuring formats based on paths" do
+    it "allows title_format to be configured for a certain path"
+    it "allows meta_description_selector to be configured for a certain path"
+    it "allows meta_keywords_selector to be configured for a certain path"
+  end
 end

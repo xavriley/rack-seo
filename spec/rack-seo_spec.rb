@@ -58,7 +58,7 @@ describe "RackSeo" do
 
   context "validate output" do
     before do
-      @example_page = Fixtures.simple
+      @example_page = Fixtures.complex
       @rack_seo.execute! @example_page
     end
 
@@ -73,19 +73,35 @@ describe "RackSeo" do
     end
     it "should have a meta description with content that is less than 150 chars and 30 words" do
       description = @example_page.at("meta[name='description']").attr('content')
-      description.length.should be <= 150 
       description.split(/\b/).length.should be > 1
-      description.split(/\b/).length.should be <= 100
       pending("A better text summarizer with more control over length")
+      description.split(/\b/).length.should be <= 100
+      description.length.should be <= 150 
       description.split(/\b/).length.should be <= 30 
     end
-    it "should have meta keywords with content that is a lowercase, comma separated list" do
+    it "should have meta keywords with content that is a lowercase, comma separated list, without leading/trailing commas" do
       keywords = @example_page.at("meta[name='keywords']").attr('content')
-      keywords.should be =~ /[a-z,]+/
+      keywords.should match /[a-z,]+/
+      keywords.should_not match /\A,/
+      keywords.should_not match /,\Z/
       keywords.split(/,/).length.should be > 1 
     end
-    it "provides a readable phrase for the title (no line breaks)"
-    it "provides a readable paragraph for the meta_description (no line breaks)"
+    it "has a title that is readable (no line breaks or leading/trailing spaces)" do
+      title = @example_page.at('title')
+      title.text.should_not match(/\A\s/)
+      title.text.should_not match(/\n+/)
+      title.text.should_not match(/\s\s+/)
+      title.text.should_not match(/\t+/)
+      title.text.should_not match(/\s\Z/)
+    end
+    it "provides a readable paragraph for the meta_description (no line breaks or leading/trailing spaces)" do
+      meta_description = @example_page.at("meta[name='description']").attr('content')
+      meta_description.should_not match(/\A\s/)
+      meta_description.should_not match(/\n+/)
+      meta_description.should_not match(/\s\s+/)
+      meta_description.should_not match(/\t+/)
+      meta_description.should_not match(/\s\Z/)
+    end
   end
 
 end
