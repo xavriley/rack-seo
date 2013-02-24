@@ -1,6 +1,6 @@
 --- 
 default: 
-  title_format: "{{h1}} - Happy happy"
+  title_format: "{{h1}} - Custom Path Test"
   meta_description_selector: "#sidebar"
   meta_keywords_selector: "#banner"
 custom:
