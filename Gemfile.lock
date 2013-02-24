@@ -33,6 +33,8 @@ GEM
       rack
       rack-pagespeed
       rake
+    rack-test (0.6.2)
+      rack (>= 1.0)
     rake (10.0.3)
     rake-compiler (0.8.3)
       rake
@@ -63,6 +65,7 @@ DEPENDENCIES
   nokogiri
   pry
   rack-pagespeed
+  rack-test
   rdoc (~> 3.12)
   rspec (~> 2.8.0)
   simplecov

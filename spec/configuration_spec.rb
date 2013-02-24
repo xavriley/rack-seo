@@ -37,17 +37,15 @@ describe "RackSeo Configuration" do
   context "sad config file" do
     before do
       @rack_seo = RackSeo.new :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/sad.yml"
-      @rack_seo_default = RackSeo.new :public => Fixtures.path, :store => {}
       @sad_page = Fixtures.simple
-      @default_page = Fixtures.simple_copy
       @rack_seo.execute! @sad_page
-      @rack_seo_default.execute! @default_page
     end
-    it "fails gracefully with a bad title format" do
-      @env.response.should be_success
+    it "fails gracefully with a bad title, description or keyword selector" do
+      inner_app = lambda { |env| [200, {'Content-Type' => 'text/plain'}, [@sad_page.to_html]] }
+      app = Rack::PageSpeed.new inner_app, :public => File.expand_path("../../public", __FILE__)
+      status, headers, body = app.call(@env)
+      status.should == 200
     end
-    it "fails gracefully with a bad description selector"
-    it "fails gracefully with a bad keywords selector"
   end
 
   context "configuring formats based on paths" do

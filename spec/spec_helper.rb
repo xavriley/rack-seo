@@ -2,6 +2,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'pry'
 require 'rspec'
+require 'rack/test'
 require 'rack/pagespeed'
 require 'rack/pagespeed/store/disk'
 require 'fileutils'
@@ -30,6 +31,7 @@ end
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 RSpec.configure do |config|
+  include Rack::Test::Methods
   config.before :each do
     Fixtures = OpenStruct.new unless defined?(Fixtures)
     Fixtures.path = File.join(File.dirname(__FILE__), 'fixtures')
