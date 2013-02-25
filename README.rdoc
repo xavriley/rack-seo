@@ -1,9 +1,25 @@
-= rack-seo
+= Rack SEO
 
-Description goes here.
+Rack SEO takes a page, analyses the content and provides relevant meta tags based on the words in the page.
+It's easy to configure (via a YAML file) so you can control all your SEO meta tags from one place for any 
+existing Rack application (including Rails, Sinatra, Padrino etc.)
 
-== Contributing to rack-seo
- 
+== Features
+
+* Provides keyword relevant title, meta-description and meta-keyword tags for every page
+* Use CSS selectors to pull any content into the title tag
+* Use CSS selectors to specify where to look for the meta description and keyword content e.g. "#intro"
+* Fully configurable for each path your app, with wildcard matching using regular expressions
+
+== Caveats
+
+* Processes on every request, so be sure to use caching in production
+* Uses the `summarize` gem, which is a wrapper around ("The Open Text Summarizer")[http://libots.sourceforge.net/]
+
+== Contributing to Rack SEO
+
+Contributors are very welcome! Use Github issues for feature requests and other suggestions/improvements.
+
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
 * Fork the project.

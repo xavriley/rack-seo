@@ -1,0 +1,32 @@
+---
+# default is the fallback for any paths that you have not specified
+# explicitly.
+default: 
+  # title_format is a ruby string which parses out anything between {{
+  # and }} as a CSS selector (using Nokogiri)
+  title_format: "{{h1}} - Acme Ltd"
+  # meta_description_selector lets you specify where to pull the text
+  # content from to extract the summary text. The default is #content,
+  # falling back to the <body> tag if that isn't present. You can
+  # specify your own below. It pulls out the inner text and should only
+  # match one div or item.
+  meta_description_selector: "#my_juicy_keyword_rich_summary_div"
+  # Same as the description selector, but automatically generates a
+  # comma separated list from the content provided
+  meta_keywords_selector: "#my_tag_stuffed_p_tag"
+# The custom key (optional) contains any paths you'd like to specify.
+# These are tested against the current path, longest first to match the
+# most specific by default.
+custom:
+  -
+    matcher: '/blog'
+    title_format: "The Acme Company Blog - {{#content h1}}"
+    meta_description_selector: "#post_content"
+    meta_keywords_selector: "#comments"
+  -
+    matcher: '/contact-us'
+    # Plain old strings are fine too
+    title_format: "How to contact us about faulty anvils"
+    # You can skip the other selectors if you're happy with the
+    # #content/<body> defaults
+
