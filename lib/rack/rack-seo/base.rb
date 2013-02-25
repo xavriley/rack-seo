@@ -97,7 +97,7 @@ module Rack
       end
 
       def sanitize_meta_description(meta_description)
-        meta_description.to_s.gsub(/\s+/, ' ').strip
+        meta_description.to_s.gsub(/[\s]+/, ' ').gsub(/[\r|\n]+/, ' ').strip
       end
 
       def sanitize_meta_keywords(keywords)

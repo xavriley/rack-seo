@@ -10,7 +10,7 @@ describe "RackSeo Configuration" do
   end
 
   it "reads a configuration file from config/rack_seo.yml by default" do
-    pending "how I mock a config/yml file"
+    pending "how I mock a config/yml file as if from the application root"
     @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}
   end
 
@@ -51,24 +51,26 @@ describe "RackSeo Configuration" do
   context "configuring formats based on paths" do
     pending "test / against custom path"
     before do
+      @page = Fixtures.complex
+      @page_test = Fixtures.complex_copy
       @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}
       @rack_seo_test = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/custom_paths.yml"
-      @page = Fixtures.complex
       @env = Rack::MockRequest.env_for '/'
       @env_test = Rack::MockRequest.env_for '/test-path'
-      status, headers, body = @rack_seo.call(@test_env)
+      status, headers, body = @rack_seo.call(@env)
       @response_body = Nokogiri::HTML(body.first)
-      status_test, headers_test, body_test = @rack_seo.call(@test_env)
-      @response_body = Nokogiri::HTML(body.first)
+      status_test, headers_test, body_test = @rack_seo_test.call(@env_test)
+      @response_body_test = Nokogiri::HTML(body_test.first)
     end
     it "allows title_format to be configured for a certain path" do
-      @response_body.at_css('title').should_not == Fixtures.complex.at_css('title')
+      @response_body_test.at_css('title').should_not == @response_body.at_css('title')
     end
     it "allows meta_description_selector to be configured for a certain path" do
-      @response_body.at_css("meta[name='description']").should == Fixtures.complex.at_css("meta[name='description']")
+      @response_body_test.at_css("meta[name='description']")['content'].should_not == @response_body.at_css("meta[name='description']")['content']
     end
     it "allows meta_keywords_selector to be configured for a certain path" do
-      @response_body.at_css("meta[name='keywords']").should == Fixtures.complex.at_css("meta[name='keywords']")
+      @response_body_test.at_css("meta[name='keywords']")['content'].should_not == @response_body.at_css("meta[name='keywords']")['content']
     end
+    it "allows path to be matched against a Regexp"
   end
 end
