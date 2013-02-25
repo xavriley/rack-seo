@@ -7,13 +7,11 @@ existing Rack application (including Rails, Sinatra, Padrino etc.)
 
 ### Dear God, why?
 
-Whilst this is never going to replace a fully-fledged SEO campaign, I
-thought it would be good to have a drop in solution that provided better
-defaults than the same title and meta for every page on the site. I also
-like the idea that configuration all happens in one place, which means
-SEO people or end users don't have to add 30,000 meta tags using a slow
-CMS. SEO tags are a common client request and it seems like a lot of
-time and effort is wasted on sub-par solutions.
+SEO tags are a common client request and it seems like a lot of
+time and effort is wasted on sub-par solutions. Often, these tags 
+are based on content that already appears in the page and this gem helps to
+streamline that process. Also, it gets the implementation out of your app logic 
+so you can concentrate on doing more interesting stuff whilst keeping our search bot overlords happy.
 
 If that still doesn't convince you, that's fine. My only other
 reason was that my New Year's resolutions for 2013 included `write a gem` 
@@ -74,7 +72,7 @@ You can put the YAML config wherever you like but I would suggest
 # explicitly.
 default: 
   # title_format is a ruby string which parses out anything between {{
-  # and }} as a CSS selector (using Nokogiri)
+  # and }} as a CSS selector (using Nokogiri) and pulls out the inner_text
   title_format: "{{h1}} - Acme Ltd"
   # meta_description_selector lets you specify where to pull the text
   # content from to extract the summary text. The default is #content,
@@ -105,15 +103,15 @@ custom:
 ## Caveats
 
 * Processes on every request, so be sure to use caching in production
-* Uses the `summarize` gem, which is a wrapper around ("The Open Text
-  Summarizer")[http://libots.sourceforge.net/]. This has dependencies of
+* Uses the `summarize` gem, which is a wrapper around ["The Open Text
+Summarizer"](http://libots.sourceforge.net/). This has dependencies of
 its own (see installation) so will probably not work out of the box on
 Heroku.
 
 ## Credits
 
-I originally did a proof of concept for this using the (Rack
-Pagespeed)[http://rack-pagespeed.heroku.com/]
+I originally did a proof of concept for this using the [Rack
+Pagespeed](http://rack-pagespeed.heroku.com/)
 middleware so thanks to @julio_ody for his work on that.
 
 The clever stuff (text summarization and keyword extraction) is all
