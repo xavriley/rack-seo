@@ -1,8 +1,5 @@
-source "http://rubygems.org"
-# Add dependencies required to use your gem here.
-# Example:
-gem "nokogiri"
-gem "summarize"
+source :rubygems
+gemspec
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

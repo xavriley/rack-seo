@@ -13,9 +13,6 @@ doc
 .bundle
 bin/
 
-# jeweler generated
-pkg
-
 # Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore: 
 #
 # * Create a file at ~/.gitignore
@@ -31,9 +28,25 @@ pkg
 #
 #.DS_Store
 
+*.gem
+*.rbc
+.bundle
+.config
+.yardoc
+Gemfile.lock
+InstalledFiles
+_yardoc
+coverage
+doc/
+lib/bundler/man
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+
 # For TextMate
-#*.tmproj
-#tmtags
+*.tmproj
+tmtags
 
 # For emacs:
 #*~
@@ -41,7 +54,7 @@ pkg
 #.\#*
 
 # For vim:
-#*.swp
+*.swp
 
 # For redcar:
 #.redcar
