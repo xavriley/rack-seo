@@ -6,18 +6,18 @@ describe "RackSeo Configuration" do
   end
 
   it "reads a configuration file specified in the initializer" do
-    @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "config/rack_seo.default.yml"
+    @rack_seo = Rack::RackSeo.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "config/rack_seo.default.yml"
   end
 
   it "reads a configuration file from config/rack_seo.yml by default" do
     pending "how I mock a config/yml file as if from the application root"
-    @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}
+    @rack_seo = Rack::RackSeo.new Apps.complex, :public => Fixtures.path, :store => {}
   end
 
   context "happy config file" do
     before do
-      @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/happy.yml"
-      @rack_seo_default = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}
+      @rack_seo = Rack::RackSeo.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/happy.yml"
+      @rack_seo_default = Rack::RackSeo.new Apps.complex, :public => Fixtures.path, :store => {}
       @happy_page = Fixtures.complex
       @default_page = Fixtures.complex_copy
       @rack_seo.execute! @happy_page
@@ -36,7 +36,7 @@ describe "RackSeo Configuration" do
 
   context "sad config file" do
     before do
-      @rack_seo = Rack::RackSeo::Base.new Apps.simple, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/sad.yml"
+      @rack_seo = Rack::RackSeo.new Apps.simple, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/sad.yml"
       @sad_page = Fixtures.simple
       @rack_seo.execute! @sad_page
     end
@@ -53,8 +53,8 @@ describe "RackSeo Configuration" do
     before do
       @page = Fixtures.complex
       @page_test = Fixtures.complex_copy
-      @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}
-      @rack_seo_test = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/custom_paths.yml"
+      @rack_seo = Rack::RackSeo.new Apps.complex, :public => Fixtures.path, :store => {}
+      @rack_seo_test = Rack::RackSeo.new Apps.complex, :public => Fixtures.path, :store => {}, :config => "spec/sample_configs/custom_paths.yml"
       @env = Rack::MockRequest.env_for '/'
       @env_test = Rack::MockRequest.env_for '/test-path'
       status, headers, body = @rack_seo.call(@env)
