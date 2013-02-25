@@ -17,9 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "rack-seo"
   gem.homepage = "http://github.com/xavriley/rack-seo"
   gem.license = "MIT"
-  gem.summary = "Generate and manage meta tags for better SEO"
-  gem.description = %Q{Lets you extract sensible default content for meta tags using the markup from that page.
-    You can track and optimise these using the built in admin interface or just set it and forget it.}
+  gem.summary = "Generate and manage meta tags on the fly using Rack Middleware"
+  gem.description = %Q{Lets you extract sensible default content for meta tags using the markup from that page.}
   gem.email = "xavriley@github.com"
   gem.authors = ["Xavier Riley"]
   # dependencies defined in Gemfile
