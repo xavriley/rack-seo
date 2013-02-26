@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "RackSeo" do
   before do
-    @rack_seo = Rack::RackSeo.new Apps.complex, :public => Fixtures.path, :store => {}
+    @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path
     @env = Rack::MockRequest.env_for '/'
   end
 

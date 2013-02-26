@@ -98,6 +98,11 @@ custom:
     title_format: "How to contact us about faulty anvils"
     # You can skip the other selectors if you're happy with the
     # #content/<body> defaults
+  -
+    # Matching wildcards works through regular expressions, though
+    # it's not pretty
+    matcher: !ruby/regexp '/\/news\/.*/'
+    title_format: "{{.article_body h3}} - Acme News"
 ```  
 
 ## Caveats

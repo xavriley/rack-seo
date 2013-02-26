@@ -10,7 +10,7 @@ custom:
     meta_description_selector: "#sidebar"
     meta_keywords_selector: "#banner"
   -
-    matcher: '/test-path-two'
-    title_format: "Test two - {{h2}}"
+    matcher: !ruby/regexp '/\/test-regex-.*/'
+    title_format: "Test regex - {{h2}}"
     meta_description_selector: "#sidebar"
     meta_keywords_selector: "#banner"
