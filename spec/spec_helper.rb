@@ -37,9 +37,9 @@ RSpec.configure do |config|
   config.before :each do
     Fixtures = OpenStruct.new unless defined?(Fixtures)
     Fixtures.path = File.join(File.dirname(__FILE__), 'fixtures')
-    Fixtures.complex = Nokogiri::HTML(fixture('complex.html'))
-    Fixtures.complex_copy = Nokogiri::HTML(fixture('complex.html'))
-    Fixtures.simple = Nokogiri::HTML(fixture('simple.html'))
-    Fixtures.simple_copy = Nokogiri::HTML(fixture('simple.html'))
+    Fixtures.complex = Rack::RackSeo::Document.parse(fixture('complex.html'))
+    Fixtures.complex_copy = Rack::RackSeo::Document.parse(fixture('complex.html'))
+    Fixtures.simple = Rack::RackSeo::Document.parse(fixture('simple.html'))
+    Fixtures.simple_copy = Rack::RackSeo::Document.parse(fixture('simple.html'))
   end
 end

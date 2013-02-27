@@ -7,29 +7,29 @@ module Rack
 
       def initialize app, options, &block
         @app = app
-        @current_path = "/"
         if options[:config]
           @config = YAML.load(IO.read(options[:config]))
         else
           @config = YAML.load(IO.read("config/rack_seo.default.yml"))
         end
-        @dispatcher = RackSeo::Dispatcher.new(@config, @current_path)
       end
 
       def call env
-        @current_path = env['PATH_INFO']
-        @dispatcher = RackSeo::Dispatcher.new(@config, @current_path)
-        status, headers, @response = @app.call(env)
-        return [status, headers, @response] unless headers['Content-Type'] =~ /html/
-        body = ""; @response.each do |part| body << part end
-        @document = Nokogiri::HTML(body)
-        execute! @document
-        body = @document.to_html
+        # Setup document body ready to process
+        status, headers, response = @app.call(env)
+        return [status, headers, response] unless headers['Content-Type'] =~ /html/
+        body = ""; response.each do |part| body << part end
+
+        document = Rack::RackSeo::Document.parse(body)
+        current_path = env['PATH_INFO'] || '/'
+        execute! document, current_path
+        body = document.to_html
         headers['Content-Length'] = body.length.to_s if headers['Content-Length'] # still UTF-8 unsafe
         [status, headers, [body]]        
       end
 
-      def execute!(document)
+      def execute!(document, current_path = '/')
+        @dispatcher = RackSeo::Dispatcher.new(@config, current_path)
         setup_meta_tags(document)
         set_meta_title(document)
         set_meta_description(document)

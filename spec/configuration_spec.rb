@@ -12,14 +12,15 @@ describe "RackSeo Configuration" do
   context "happy config file" do
     before do
       @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :config => "spec/sample_configs/happy.yml"
-      @rack_seo_default = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path
       @happy_page = Fixtures.complex
-      @default_page = Fixtures.complex_copy
       @rack_seo.execute! @happy_page
+
+      @rack_seo_default = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path
+      @default_page = Fixtures.complex_copy
       @rack_seo_default.execute! @default_page
     end
     it "allows the title text to be configured" do
-      @happy_page.at_css('title').text.should include "#{(@happy_page.at_css('h1').text)} - Happy happy"
+      @happy_page.title_content.should include "#{(@happy_page.at_css('h1').text)} - Happy happy"
     end
     it "allows the meta description text source material to be narrowed down by a selector" do
       @happy_page.at_css("meta[name='description']").attr('content').should_not == @default_page.at_css("meta[name='description']").attr('content')
@@ -49,7 +50,7 @@ describe "RackSeo Configuration" do
       @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path
       @env = Rack::MockRequest.env_for '/'
       status, headers, body = @rack_seo.call(@env)
-      @response_body = Nokogiri::HTML(body.first)
+      @response_body = Rack::RackSeo::Document.parse(body.first)
 
       @page_test = Fixtures.complex_copy
       @rack_seo_test = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :config => "spec/sample_configs/custom_paths.yml"
@@ -59,17 +60,17 @@ describe "RackSeo Configuration" do
       before do
         env_test = Rack::MockRequest.env_for '/test-path'
         status, headers, body = @rack_seo_test.call(env_test)
-        @response_body_test = Nokogiri::HTML(body.first)
+        @response_body_test = Rack::RackSeo::Document.parse(body.first)
       end
 
       it "allows title_format to be configured for a certain path" do
-        @response_body_test.at_css('title').should_not == @response_body.at_css('title')
+        @response_body_test.title_tag.should_not == @response_body.title_tag
       end
       it "allows meta_description_selector to be configured for a certain path" do
-        @response_body_test.at_css("meta[name='description']")['content'].should_not == @response_body.at_css("meta[name='description']")['content']
+        @response_body_test.description_content.should_not == @response_body.description_content
       end
       it "allows meta_keywords_selector to be configured for a certain path" do
-        @response_body_test.at_css("meta[name='keywords']")['content'].should_not == @response_body.at_css("meta[name='keywords']")['content']
+        @response_body_test.keywords_content.should_not == @response_body.keywords_content
       end
     end
 
@@ -77,18 +78,18 @@ describe "RackSeo Configuration" do
       before do
         env_test = Rack::MockRequest.env_for '/test-regex-two/subfolder'
         status, headers, body = @rack_seo_test.call(env_test)
-        @response_body_test = Nokogiri::HTML(body.first)
+        @response_body_test = Rack::RackSeo::Document.parse(body.first)
       end
 
       it "allows title_format to be configured for a certain path" do
-        @response_body_test.at_css('title').should_not == @response_body.at_css('title')
-        @response_body_test.at_css('title').text.should include('regex')
+        @response_body_test.title_tag.should_not == @response_body.title_tag
+        @response_body_test.title_content.should include('regex')
       end
       it "allows meta_description_selector to be configured for a certain path" do
-        @response_body_test.at_css("meta[name='description']")['content'].should_not == @response_body.at_css("meta[name='description']")['content']
+        @response_body_test.description_content.should_not == @response_body.description_content
       end
       it "allows meta_keywords_selector to be configured for a certain path" do
-        @response_body_test.at_css("meta[name='keywords']")['content'].should_not == @response_body.at_css("meta[name='keywords']")['content']
+        @response_body_test.keywords_content.should_not == @response_body.keywords_content
       end
     end
 
