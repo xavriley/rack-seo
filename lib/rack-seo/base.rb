@@ -46,23 +46,19 @@ module Rack
 
       def set_meta_title(document)
         content = parse_meta_title(document, get_title_format)
-        content = sanitize_meta_title(content)
+        content = Rack::RackSeo::Sanitize.sanitize_meta_title(content)
         title_tag = find_meta_title(document)
         title_tag.content = content
       end
 
       def set_meta_description(document)
         meta_description_tag = find_meta_desc(document)
-        meta_description_selector = find_selector(document, get_meta_description_selector).nil? ? "body" : get_meta_description_selector
-        content = get_inner_text_from_css(document, meta_description_selector).summarize(:ratio => 1)
-        meta_description_tag['content'] = sanitize_meta_description(content)
+        meta_description_tag['content'] = Rack::RackSeo::Summarizer.extract_description(document, get_meta_description_selector)
       end
 
       def set_meta_keywords(document)
         meta_keywords_tag = find_meta_keywords(document)
-        meta_keywords_selector = find_selector(document, get_meta_keywords_selector).nil? ? "body" : get_meta_keywords_selector
-        content = get_inner_text_from_css(document, meta_keywords_selector).summarize(:topics => true).last
-        meta_keywords_tag['content'] = sanitize_meta_keywords(content)
+        meta_keywords_tag['content'] = Rack::RackSeo::Summarizer.extract_keywords(document, get_meta_keywords_selector)
       end
 
       def find_meta_title(document)
@@ -85,20 +81,6 @@ module Rack
         title_format.gsub(/{{([^\}]+)}}/) do
           "#{document.css($1).first.text rescue nil}"
         end
-      end
-
-      def sanitize_meta_title(title)
-        title.to_s.gsub(/\s+/, ' ').strip
-      end
-
-      def sanitize_meta_description(meta_description)
-        meta_description.to_s.gsub(/[\s]+/, ' ').gsub(/[\r|\n]+/, ' ').strip
-      end
-
-      def sanitize_meta_keywords(keywords)
-        keywords.split(",").collect { |keyword| 
-          keyword.downcase.gsub(/\s+/, '')
-        }.reject(&:empty?).join(',')
       end
 
       def get_title_format
