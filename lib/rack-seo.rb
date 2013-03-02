@@ -8,6 +8,7 @@ require 'rack-seo/dispatcher'
 require 'rack-seo/document'
 require 'rack-seo/sanitize'
 require 'rack-seo/summarizer'
+require 'rack-seo/title_formatter'
 
 module Rack
   module RackSeo

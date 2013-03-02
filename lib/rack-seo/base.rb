@@ -23,6 +23,7 @@ module Rack
         document = Rack::RackSeo::Document.new(body)
         current_path = env['PATH_INFO'] || '/'
         execute!(document, current_path)
+
         body = document.to_html
         headers['Content-Length'] = body.length.to_s if headers['Content-Length'] # still UTF-8 unsafe
         [status, headers, [body]]        
@@ -35,25 +36,20 @@ module Rack
         set_meta_keywords(document, @dispatcher.keywords_selector)
       end
 
-
       def set_meta_title(document, title_format)
-        content = parse_meta_title(document, title_format)
+        content = Rack::RackSeo::TitleFormatter.parse_meta_title(document, title_format)
         content = Rack::RackSeo::Sanitize.sanitize_meta_title(content)
         document.title_content = content
       end
 
       def set_meta_description(document, description_selector)
-        document.description_content = Rack::RackSeo::Summarizer.extract_description(document, description_selector)
+        content = Rack::RackSeo::Summarizer.extract_description(document, description_selector)
+        document.description_content = content
       end
 
       def set_meta_keywords(document, keywords_selector)
-        document.keywords_content = Rack::RackSeo::Summarizer.extract_keywords(document, keywords_selector)
-      end
-
-      def parse_meta_title(document, title_format)
-        title_format.gsub(/{{([^\}]+)}}/) do
-          "#{document.css($1).first.text rescue nil}"
-        end
+        content = Rack::RackSeo::Summarizer.extract_keywords(document, keywords_selector)
+        document.keywords_content = content
       end
 
     end

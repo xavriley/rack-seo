@@ -9,10 +9,10 @@ class Rack::RackSeo::Document < Nokogiri::HTML::Document
       doc = parse(args.first)
       setup_meta_tags(doc)
     end
-  end
 
-  def self.parse(string_or_io, url = nil, encoding = nil, options = Nokogiri::XML::ParseOptions::RECOVER)
-    super(string_or_io, url, encoding, options)
+    def parse(string_or_io, url = nil, encoding = 'utf-8', options = Nokogiri::XML::ParseOptions::RECOVER)
+      super(string_or_io, url, encoding, options)
+    end
   end
 
   def title_content
