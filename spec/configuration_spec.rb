@@ -50,7 +50,7 @@ describe "RackSeo Configuration" do
       @rack_seo = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path
       @env = Rack::MockRequest.env_for '/'
       status, headers, body = @rack_seo.call(@env)
-      @response_body = Rack::RackSeo::Document.parse(body.first)
+      @response_body = Rack::RackSeo::Document.new(body.first)
 
       @page_test = Fixtures.complex_copy
       @rack_seo_test = Rack::RackSeo::Base.new Apps.complex, :public => Fixtures.path, :config => "spec/sample_configs/custom_paths.yml"
@@ -60,7 +60,7 @@ describe "RackSeo Configuration" do
       before do
         env_test = Rack::MockRequest.env_for '/test-path'
         status, headers, body = @rack_seo_test.call(env_test)
-        @response_body_test = Rack::RackSeo::Document.parse(body.first)
+        @response_body_test = Rack::RackSeo::Document.new(body.first)
       end
 
       it "allows title_format to be configured for a certain path" do
@@ -78,7 +78,7 @@ describe "RackSeo Configuration" do
       before do
         env_test = Rack::MockRequest.env_for '/test-regex-two/subfolder'
         status, headers, body = @rack_seo_test.call(env_test)
-        @response_body_test = Rack::RackSeo::Document.parse(body.first)
+        @response_body_test = Rack::RackSeo::Document.new(body.first)
       end
 
       it "allows title_format to be configured for a certain path" do

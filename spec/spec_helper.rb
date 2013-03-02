@@ -37,9 +37,9 @@ RSpec.configure do |config|
   config.before :each do
     Fixtures = OpenStruct.new unless defined?(Fixtures)
     Fixtures.path = File.join(File.dirname(__FILE__), 'fixtures')
-    Fixtures.complex = Rack::RackSeo::Document.parse(fixture('complex.html'))
-    Fixtures.complex_copy = Rack::RackSeo::Document.parse(fixture('complex.html'))
-    Fixtures.simple = Rack::RackSeo::Document.parse(fixture('simple.html'))
-    Fixtures.simple_copy = Rack::RackSeo::Document.parse(fixture('simple.html'))
+    Fixtures.complex = Rack::RackSeo::Document.new(fixture('complex.html'))
+    Fixtures.complex_copy = Rack::RackSeo::Document.new(fixture('complex.html'))
+    Fixtures.simple = Rack::RackSeo::Document.new(fixture('simple.html'))
+    Fixtures.simple_copy = Rack::RackSeo::Document.new(fixture('simple.html'))
   end
 end

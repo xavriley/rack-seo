@@ -1,7 +1,7 @@
 class Rack::RackSeo::Dispatcher
   attr_accessor :title_format
-  attr_accessor :meta_description_selector
-  attr_accessor :meta_keywords_selector
+  attr_accessor :description_selector
+  attr_accessor :keywords_selector
 
   def initialize(config, current_path)
     if config["custom"]
@@ -12,8 +12,8 @@ class Rack::RackSeo::Dispatcher
     end
     matching_path ||= {}
     @title_format = matching_path["title_format"] || config["default"]["title_format"]
-    @meta_description_selector = matching_path["meta_description_selector"] || config["default"]["meta_description_selector"]
-    @meta_keywords_selector = matching_path["meta_keywords_selector"] || config["default"]["meta_keywords_selector"]
+    @description_selector = matching_path["meta_description_selector"] || config["default"]["meta_description_selector"]
+    @keywords_selector = matching_path["meta_keywords_selector"] || config["default"]["meta_keywords_selector"]
   end
 
 end
