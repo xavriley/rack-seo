@@ -29,10 +29,11 @@ and `write some Rack Middleware` so here it is.
 ```bash
 #Assuming Mac OSX and Homebrew 
 brew update
-brew install libxml2
+brew install libxml2 # (you might need to brew link libxml2 as well)
 brew install glib   
 
 #Follow instructions to install the summarize gem
+#Don't just gem install as it's out of date on Rubygems
 git clone https://github.com/ssoper/summarize.git
 cd summarize
 rake build
