@@ -33,6 +33,8 @@ bin/
 .bundle
 .config
 .yardoc
+.rvmrc
+.rspec
 Gemfile.lock
 InstalledFiles
 _yardoc
